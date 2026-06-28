@@ -8,4 +8,6 @@
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/MedicineRepository.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/PrescriptionRepository.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/UserRepository.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/service/MedicineService.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/service/PrescriptionService.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/service/UserService.java

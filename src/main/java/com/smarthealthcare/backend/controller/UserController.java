@@ -1,7 +1,7 @@
 package com.smarthealthcare.backend.controller;
 
 import com.smarthealthcare.backend.entity.User;
-import com.smarthealthcare.backend.repository.UserRepository;
+import com.smarthealthcare.backend.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,14 +10,14 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/api/users")
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 }
