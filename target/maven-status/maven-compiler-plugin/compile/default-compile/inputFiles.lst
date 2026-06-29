@@ -2,6 +2,7 @@
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/controller/MedicineController.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/controller/PrescriptionController.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/controller/UserController.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/dto/PrescriptionRequest.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/entity/Medicine.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/entity/Prescription.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/entity/User.java
