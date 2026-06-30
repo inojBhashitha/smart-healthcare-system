@@ -1,9 +1,10 @@
 package com.smarthealthcare.backend.service;
 
+import com.smarthealthcare.backend.dto.prescription.PrescriptionRequest;
 import com.smarthealthcare.backend.entity.Prescription;
 import com.smarthealthcare.backend.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
-import com.smarthealthcare.backend.dto.PrescriptionRequest;
+
 import java.time.LocalDateTime;
 
 import java.util.List;
