@@ -1,5 +1,9 @@
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/BackendApplication.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/controller/AuthController.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/security/CustomUserDetails.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/security/CustomUserDetailsService.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/security/JwtAuthenticationFilter.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/security/JwtService.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/service/AuthService.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/auth/service/impl/AuthServiceImpl.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/config/SecurityConfig.java
