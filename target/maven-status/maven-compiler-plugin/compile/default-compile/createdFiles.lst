@@ -5,6 +5,7 @@ com/smarthealthcare/backend/controller/PrescriptionController.class
 com/smarthealthcare/backend/service/MedicineService.class
 com/smarthealthcare/backend/service/UserService.class
 com/smarthealthcare/backend/controller/UserController.class
+com/smarthealthcare/backend/prescription/controller/PrescriptionUploadController.class
 com/smarthealthcare/backend/dto/prescription/UploadPrescriptionResponse.class
 com/smarthealthcare/backend/entity/Prescription.class
 com/smarthealthcare/backend/repository/PrescriptionRepository.class
