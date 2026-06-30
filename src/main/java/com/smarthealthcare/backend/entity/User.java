@@ -11,12 +11,21 @@ import lombok.Setter;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String role;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "enabled")
+    private Boolean enabled;
+
 }

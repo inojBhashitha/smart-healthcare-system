@@ -1,4 +1,4 @@
-package com.smarthealthcare.backend.dto;
+package com.smarthealthcare.backend.dto.prescription;
 
 import lombok.Getter;
 import lombok.Setter;
