@@ -3,7 +3,9 @@ com/smarthealthcare/backend/controller/PrescriptionController.class
 com/smarthealthcare/backend/exception/GlobalExceptionHandler.class
 com/smarthealthcare/backend/auth/service/impl/AuthServiceImpl.class
 com/smarthealthcare/backend/entity/Prescription.class
+com/smarthealthcare/backend/ocr/controller/OcrController.class
 com/smarthealthcare/backend/auth/security/JwtAuthenticationFilter.class
+com/smarthealthcare/backend/ocr/service/OcrService.class
 com/smarthealthcare/backend/dto/prescription/PrescriptionRequest.class
 com/smarthealthcare/backend/repository/PrescriptionRepository.class
 com/smarthealthcare/backend/repository/UserRepository.class
@@ -17,12 +19,14 @@ com/smarthealthcare/backend/exception/ResourceAlreadyExistsException.class
 com/smarthealthcare/backend/entity/Medicine.class
 com/smarthealthcare/backend/service/MedicineService.class
 com/smarthealthcare/backend/service/UserService.class
+com/smarthealthcare/backend/ocr/service/TesseractOcrService.class
 com/smarthealthcare/backend/controller/UserController.class
 com/smarthealthcare/backend/auth/controller/AuthController.class
 com/smarthealthcare/backend/auth/security/CustomUserDetailsService.class
 com/smarthealthcare/backend/auth/security/JwtService.class
 com/smarthealthcare/backend/dto/auth/AuthResponse.class
 com/smarthealthcare/backend/service/PrescriptionService.class
+com/smarthealthcare/backend/ocr/dto/OcrResponse.class
 com/smarthealthcare/backend/exception/ApiError.class
 com/smarthealthcare/backend/controller/MedicineController.class
 com/smarthealthcare/backend/auth/service/AuthService.class

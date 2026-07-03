@@ -20,6 +20,10 @@
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/exception/ApiError.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/exception/GlobalExceptionHandler.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/exception/ResourceAlreadyExistsException.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/ocr/controller/OcrController.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/ocr/dto/OcrResponse.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/ocr/service/OcrService.java
+/home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/ocr/service/TesseractOcrService.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/MedicineRepository.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/PrescriptionRepository.java
 /home/inoj/Downloads/backend/src/main/java/com/smarthealthcare/backend/repository/UserRepository.java
