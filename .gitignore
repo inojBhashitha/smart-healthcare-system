@@ -1,6 +1,9 @@
 # Maven
 target/
 
+# Uploaded prescription images
+uploads/
+
 # Eclipse
 .project
 .classpath
