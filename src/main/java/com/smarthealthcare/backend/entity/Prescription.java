@@ -16,6 +16,11 @@ public class Prescription {
     @Column(nullable = false)
     private String imagePath;
 
+    @Column(columnDefinition = "TEXT")
+    private String extractedText;
+
+    private Integer medicinesFound;
+
     @Column(nullable = false)
     private String status;
 
@@ -39,6 +44,22 @@ public class Prescription {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getExtractedText() {
+        return extractedText;
+    }
+
+    public void setExtractedText(String extractedText) {
+        this.extractedText = extractedText;
+    }
+
+    public Integer getMedicinesFound() {
+        return medicinesFound;
+    }
+
+    public void setMedicinesFound(Integer medicinesFound) {
+        this.medicinesFound = medicinesFound;
     }
 
     public String getStatus() {

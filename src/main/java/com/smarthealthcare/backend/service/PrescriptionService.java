@@ -20,12 +20,17 @@ public class PrescriptionService {
         return prescriptionRepository.findAll();
     }
 
-    public Prescription savePrescription(String imagePath) {
+    public Prescription savePrescription(
+            String imagePath,
+            String extractedText,
+            int medicinesFound) {
 
         Prescription prescription = new Prescription();
 
         prescription.setImagePath(imagePath);
-        prescription.setStatus("PENDING_OCR");
+        prescription.setExtractedText(extractedText);
+        prescription.setMedicinesFound(medicinesFound);
+        prescription.setStatus("OCR_COMPLETED");
         prescription.setUploadedAt(LocalDateTime.now());
 
         return prescriptionRepository.save(prescription);
