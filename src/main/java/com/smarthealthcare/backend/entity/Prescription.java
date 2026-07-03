@@ -1,36 +1,59 @@
 package com.smarthealthcare.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "prescriptions")
-@Getter
-@Setter
 public class Prescription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "prescription_id")
-    private Integer prescriptionId;
+    private Long prescriptionId;
 
-    @Column(name = "patient_id")
-    private Integer patientId;
+    @Column(nullable = false)
+    private String imagePath;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "doctor_name")
-    private String doctorName;
-
-    private String hospital;
-
-    @Column(name = "scan_date")
-    private LocalDateTime scanDate;
-
+    @Column(nullable = false)
     private String status;
 
+    @Column(nullable = false)
+    private LocalDateTime uploadedAt;
+
+    public Prescription() {
+    }
+
+    public Long getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public void setPrescriptionId(Long prescriptionId) {
+        this.prescriptionId = prescriptionId;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getUploadedAt() {
+        return uploadedAt;
+    }
+
+    public void setUploadedAt(LocalDateTime uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 }

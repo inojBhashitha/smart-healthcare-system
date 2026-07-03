@@ -1,12 +1,10 @@
 package com.smarthealthcare.backend.service;
 
-import com.smarthealthcare.backend.dto.prescription.PrescriptionRequest;
 import com.smarthealthcare.backend.entity.Prescription;
 import com.smarthealthcare.backend.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 @Service
@@ -22,19 +20,14 @@ public class PrescriptionService {
         return prescriptionRepository.findAll();
     }
 
-    public Prescription createPrescription(PrescriptionRequest request) {
+    public Prescription savePrescription(String imagePath) {
 
-    Prescription prescription = new Prescription();
+        Prescription prescription = new Prescription();
 
-    prescription.setPatientId(request.getPatientId());
-    prescription.setImageUrl(request.getImageUrl());
-    prescription.setDoctorName(request.getDoctorName());
-    prescription.setHospital(request.getHospital());
-    prescription.setStatus(request.getStatus());
+        prescription.setImagePath(imagePath);
+        prescription.setStatus("PENDING_OCR");
+        prescription.setUploadedAt(LocalDateTime.now());
 
-    prescription.setScanDate(LocalDateTime.now());
-
-    return prescriptionRepository.save(prescription);
-}
-
+        return prescriptionRepository.save(prescription);
+    }
 }
