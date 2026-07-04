@@ -10,6 +10,10 @@ public class PrescriptionMedicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicine_id")
+    private Medicine medicine;
+
     private String medicineName;
 
     private String strength;
@@ -68,5 +72,13 @@ public class PrescriptionMedicine {
 
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;
+    }
+
+    public Medicine getMedicine() {
+    return medicine;
+    }
+
+    public void setMedicine(Medicine medicine) {
+    this.medicine = medicine;
     }
 }
