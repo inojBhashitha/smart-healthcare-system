@@ -9,6 +9,9 @@ import java.util.Optional;
 public interface PrescriptionRepository
         extends JpaRepository<Prescription, Long> {
 
-    @EntityGraph(attributePaths = "medicines")
+    @EntityGraph(attributePaths = {
+            "medicines",
+            "medicines.medicine"
+    })
     Optional<Prescription> findWithMedicinesByPrescriptionId(Long prescriptionId);
 }

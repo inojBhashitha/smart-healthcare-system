@@ -1,5 +1,6 @@
 package com.smarthealthcare.backend.service;
 
+import com.smarthealthcare.backend.dto.prescription.DatabaseMedicineResponse;
 import com.smarthealthcare.backend.dto.prescription.PrescriptionDetailsResponse;
 import com.smarthealthcare.backend.dto.prescription.PrescriptionMedicineResponse;
 import com.smarthealthcare.backend.dto.prescription.PrescriptionSummaryResponse;
@@ -7,6 +8,7 @@ import com.smarthealthcare.backend.entity.Prescription;
 import com.smarthealthcare.backend.entity.PrescriptionMedicine;
 import com.smarthealthcare.backend.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
+import com.smarthealthcare.backend.dto.prescription.DatabaseMedicineResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -80,13 +82,28 @@ public class PrescriptionService {
     }
 
     private PrescriptionMedicineResponse mapMedicine(
-            PrescriptionMedicine medicine) {
+        PrescriptionMedicine medicine) {
 
-        return new PrescriptionMedicineResponse(
-                medicine.getMedicineName(),
-                medicine.getStrength(),
-                medicine.getInstruction(),
-                medicine.getVerified()
+    DatabaseMedicineResponse databaseMedicine = null;
+
+    if (medicine.getMedicine() != null) {
+
+        databaseMedicine = new DatabaseMedicineResponse(
+                medicine.getMedicine().getMedicineId(),
+                medicine.getMedicine().getGenericName(),
+                medicine.getMedicine().getBrandName(),
+                medicine.getMedicine().getCategory(),
+                medicine.getMedicine().getDescription(),
+                medicine.getMedicine().getSideEffects()
         );
     }
+
+    return new PrescriptionMedicineResponse(
+            medicine.getMedicineName(),
+            medicine.getStrength(),
+            medicine.getInstruction(),
+            medicine.getVerified(),
+            databaseMedicine
+    );
+}
 }

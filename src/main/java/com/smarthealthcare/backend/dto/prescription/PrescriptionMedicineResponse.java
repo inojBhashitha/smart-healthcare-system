@@ -7,6 +7,9 @@ public class PrescriptionMedicineResponse {
     private String instruction;
     private Boolean verified;
 
+    // Information from the master Medicine table
+    private DatabaseMedicineResponse databaseMedicine;
+
     public PrescriptionMedicineResponse() {
     }
 
@@ -14,12 +17,14 @@ public class PrescriptionMedicineResponse {
             String medicineName,
             String strength,
             String instruction,
-            Boolean verified) {
+            Boolean verified,
+            DatabaseMedicineResponse databaseMedicine) {
 
         this.medicineName = medicineName;
         this.strength = strength;
         this.instruction = instruction;
         this.verified = verified;
+        this.databaseMedicine = databaseMedicine;
     }
 
     public String getMedicineName() {
@@ -52,5 +57,13 @@ public class PrescriptionMedicineResponse {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public DatabaseMedicineResponse getDatabaseMedicine() {
+        return databaseMedicine;
+    }
+
+    public void setDatabaseMedicine(DatabaseMedicineResponse databaseMedicine) {
+        this.databaseMedicine = databaseMedicine;
     }
 }
