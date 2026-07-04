@@ -1,6 +1,7 @@
 package com.smarthealthcare.backend.controller;
 
 import com.smarthealthcare.backend.dto.prescription.PrescriptionMedicineUpdateResponse;
+import com.smarthealthcare.backend.dto.prescription.UpdateMedicineRequest;
 import com.smarthealthcare.backend.dto.prescription.VerifyMedicineRequest;
 import com.smarthealthcare.backend.service.PrescriptionMedicineManagementService;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,23 @@ public class PrescriptionMedicineController {
         PrescriptionMedicineUpdateResponse response =
                 medicineService.verifyMedicine(
                         id,
+                        request.getVerified()
+                );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PrescriptionMedicineUpdateResponse> updateMedicine(
+            @PathVariable Long id,
+            @RequestBody UpdateMedicineRequest request) {
+
+        PrescriptionMedicineUpdateResponse response =
+                medicineService.updateMedicine(
+                        id,
+                        request.getMedicineName(),
+                        request.getStrength(),
+                        request.getInstruction(),
                         request.getVerified()
                 );
 
