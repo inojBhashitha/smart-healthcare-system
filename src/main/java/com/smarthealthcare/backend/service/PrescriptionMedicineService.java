@@ -1,5 +1,6 @@
 package com.smarthealthcare.backend.service;
 
+import com.smarthealthcare.backend.entity.Medicine;
 import com.smarthealthcare.backend.entity.Prescription;
 import com.smarthealthcare.backend.entity.PrescriptionMedicine;
 import com.smarthealthcare.backend.ocr.dto.MedicineInfo;
@@ -12,11 +13,14 @@ import java.util.List;
 public class PrescriptionMedicineService {
 
     private final PrescriptionMedicineRepository repository;
+    private final MedicineValidationService validationService;
 
     public PrescriptionMedicineService(
-            PrescriptionMedicineRepository repository) {
+            PrescriptionMedicineRepository repository,
+            MedicineValidationService validationService) {
 
         this.repository = repository;
+        this.validationService = validationService;
     }
 
     public void saveMedicines(
@@ -28,11 +32,22 @@ public class PrescriptionMedicineService {
             PrescriptionMedicine medicine =
                     new PrescriptionMedicine();
 
+            // Link to the prescription
             medicine.setPrescription(prescription);
+
+            // OCR data
             medicine.setMedicineName(medicineInfo.getName());
             medicine.setStrength(medicineInfo.getStrength());
             medicine.setInstruction(medicineInfo.getInstruction());
             medicine.setVerified(false);
+
+            // Check if medicine exists in master database
+            Medicine matchedMedicine =
+                    validationService.findMatchingMedicine(
+                            medicineInfo.getName());
+
+            // Save relationship if found
+            medicine.setMedicine(matchedMedicine);
 
             repository.save(medicine);
         }
