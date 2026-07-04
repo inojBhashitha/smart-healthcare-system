@@ -1,42 +1,20 @@
-package com.smarthealthcare.backend.entity;
-
-import jakarta.persistence.*;
+package com.smarthealthcare.backend.dto.prescription;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "prescriptions")
-public class Prescription {
+public class PrescriptionDetailsResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "prescription_id")
     private Long prescriptionId;
-
-    @Column(nullable = false)
     private String imagePath;
-
-    @Column(columnDefinition = "TEXT")
     private String extractedText;
-
     private Integer medicinesFound;
-
-    @Column(nullable = false)
     private String status;
-
-    @Column(nullable = false)
     private LocalDateTime uploadedAt;
 
-    @OneToMany(
-            mappedBy = "prescription",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<PrescriptionMedicine> medicines = new ArrayList<>();
+    private List<PrescriptionMedicineResponse> medicines;
 
-    public Prescription() {
+    public PrescriptionDetailsResponse() {
     }
 
     public Long getPrescriptionId() {
@@ -87,11 +65,11 @@ public class Prescription {
         this.uploadedAt = uploadedAt;
     }
 
-    public List<PrescriptionMedicine> getMedicines() {
+    public List<PrescriptionMedicineResponse> getMedicines() {
         return medicines;
     }
 
-    public void setMedicines(List<PrescriptionMedicine> medicines) {
+    public void setMedicines(List<PrescriptionMedicineResponse> medicines) {
         this.medicines = medicines;
     }
 }
