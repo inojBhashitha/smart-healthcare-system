@@ -28,6 +28,19 @@ public class PrescriptionService {
         this.drugInteractionService = drugInteractionService;
     }
 
+    public List<PrescriptionSummaryResponse> getPrescriptionsByStatus(String status) {
+
+    return prescriptionRepository.findByStatus(status)
+            .stream()
+            .map(prescription -> new PrescriptionSummaryResponse(
+                    prescription.getPrescriptionId(),
+                    prescription.getStatus(),
+                    prescription.getMedicinesFound(),
+                    prescription.getUploadedAt()
+            ))
+            .toList();
+}
+
     public List<PrescriptionSummaryResponse> getAllPrescriptions() {
 
         return prescriptionRepository.findAll()

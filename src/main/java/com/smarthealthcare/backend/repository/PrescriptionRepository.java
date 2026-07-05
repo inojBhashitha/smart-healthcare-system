@@ -4,6 +4,7 @@ import com.smarthealthcare.backend.entity.Prescription;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PrescriptionRepository
@@ -14,4 +15,6 @@ public interface PrescriptionRepository
             "medicines.medicine"
     })
     Optional<Prescription> findWithMedicinesByPrescriptionId(Long prescriptionId);
+
+    List<Prescription> findByStatus(String status);
 }

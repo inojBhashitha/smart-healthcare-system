@@ -21,6 +21,13 @@ public class PrescriptionController {
         this.prescriptionService = prescriptionService;
     }
 
+    @GetMapping("/status/{status}")
+public List<PrescriptionSummaryResponse> getByStatus(
+        @PathVariable String status) {
+
+    return prescriptionService.getPrescriptionsByStatus(status);
+}
+
     @GetMapping
     public List<PrescriptionSummaryResponse> getPrescriptions() {
         return prescriptionService.getAllPrescriptions();
