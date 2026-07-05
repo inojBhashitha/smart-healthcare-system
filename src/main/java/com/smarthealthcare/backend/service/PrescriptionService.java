@@ -1,5 +1,6 @@
 package com.smarthealthcare.backend.service;
 
+import com.smarthealthcare.backend.dto.druginteraction.DrugInteractionResult;
 import com.smarthealthcare.backend.dto.prescription.DatabaseMedicineResponse;
 import com.smarthealthcare.backend.dto.prescription.PrescriptionDetailsResponse;
 import com.smarthealthcare.backend.dto.prescription.PrescriptionMedicineResponse;
@@ -8,7 +9,6 @@ import com.smarthealthcare.backend.entity.Prescription;
 import com.smarthealthcare.backend.entity.PrescriptionMedicine;
 import com.smarthealthcare.backend.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
-import com.smarthealthcare.backend.dto.prescription.DatabaseMedicineResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,9 +18,14 @@ import java.util.stream.Collectors;
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
+    private final DrugInteractionService drugInteractionService;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository) {
+    public PrescriptionService(
+            PrescriptionRepository prescriptionRepository,
+            DrugInteractionService drugInteractionService) {
+
         this.prescriptionRepository = prescriptionRepository;
+        this.drugInteractionService = drugInteractionService;
     }
 
     public List<PrescriptionSummaryResponse> getAllPrescriptions() {
@@ -78,32 +83,44 @@ public class PrescriptionService {
 
         response.setMedicines(medicineResponses);
 
+        // Check drug interactions
+        List<String> medicineNames =
+                prescription.getMedicines()
+                        .stream()
+                        .map(PrescriptionMedicine::getMedicineName)
+                        .toList();
+
+        List<DrugInteractionResult> interactions =
+                drugInteractionService.checkInteractions(medicineNames);
+
+        response.setDrugInteractions(interactions);
+
         return response;
     }
 
     private PrescriptionMedicineResponse mapMedicine(
-        PrescriptionMedicine medicine) {
+            PrescriptionMedicine medicine) {
 
-    DatabaseMedicineResponse databaseMedicine = null;
+        DatabaseMedicineResponse databaseMedicine = null;
 
-    if (medicine.getMedicine() != null) {
+        if (medicine.getMedicine() != null) {
 
-        databaseMedicine = new DatabaseMedicineResponse(
-                medicine.getMedicine().getMedicineId(),
-                medicine.getMedicine().getGenericName(),
-                medicine.getMedicine().getBrandName(),
-                medicine.getMedicine().getCategory(),
-                medicine.getMedicine().getDescription(),
-                medicine.getMedicine().getSideEffects()
+            databaseMedicine = new DatabaseMedicineResponse(
+                    medicine.getMedicine().getMedicineId(),
+                    medicine.getMedicine().getGenericName(),
+                    medicine.getMedicine().getBrandName(),
+                    medicine.getMedicine().getCategory(),
+                    medicine.getMedicine().getDescription(),
+                    medicine.getMedicine().getSideEffects()
+            );
+        }
+
+        return new PrescriptionMedicineResponse(
+                medicine.getMedicineName(),
+                medicine.getStrength(),
+                medicine.getInstruction(),
+                medicine.getVerified(),
+                databaseMedicine
         );
     }
-
-    return new PrescriptionMedicineResponse(
-            medicine.getMedicineName(),
-            medicine.getStrength(),
-            medicine.getInstruction(),
-            medicine.getVerified(),
-            databaseMedicine
-    );
-}
 }
