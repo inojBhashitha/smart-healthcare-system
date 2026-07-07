@@ -1,49 +1,112 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_gradients.dart';
-import '../core/theme/app_radius.dart';
-import '../core/theme/app_text_styles.dart';
+import '../../core/theme/app_gradients.dart';
+import '../../core/theme/app_radius.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../loading/loading_indicator.dart';
 
-class CustomButton extends StatelessWidget {
-
+class CustomButton extends StatefulWidget {
   final String text;
-  final VoidCallback onPressed;
+  final IconData? icon;
+  final bool isLoading;
+  final VoidCallback? onPressed;
 
   const CustomButton({
     super.key,
     required this.text,
-    required this.onPressed,
+    this.icon,
+    this.isLoading = false,
+    this.onPressed,
   });
+
+  @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+
+  double scale = 1;
 
   @override
   Widget build(BuildContext context) {
 
-    return InkWell(
+    return GestureDetector(
 
-      borderRadius:
-          BorderRadius.circular(AppRadius.medium),
+      onTapDown: (_) {
+        setState(() => scale = .97);
+      },
 
-      onTap: onPressed,
+      onTapUp: (_) {
+        setState(() => scale = 1);
+        widget.onPressed?.call();
+      },
 
-      child: Ink(
+      onTapCancel: () {
+        setState(() => scale = 1);
+      },
 
-        height: 58,
+      child: AnimatedScale(
 
-        decoration: BoxDecoration(
+        duration: const Duration(milliseconds: 120),
 
-          gradient: AppGradients.primary,
+        scale: scale,
 
-          borderRadius:
-              BorderRadius.circular(AppRadius.medium),
-        ),
+        child: Container(
 
-        child: Center(
+          width: double.infinity,
 
-          child: Text(
-            text,
-            style: AppTextStyles.body.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+          height: 58,
+
+          decoration: BoxDecoration(
+
+            gradient: AppGradients.primary,
+
+            borderRadius:
+                BorderRadius.circular(AppRadius.medium),
+
+            boxShadow: [
+
+              BoxShadow(
+                color: Colors.blue.withOpacity(.35),
+                blurRadius: 25,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+
+          child: Center(
+
+            child: widget.isLoading
+
+                ? const LoadingIndicator(
+                    size: 30,
+                    color: Colors.white,
+                  )
+
+                : Row(
+
+                    mainAxisSize: MainAxisSize.min,
+
+                    children: [
+
+                      if (widget.icon != null) ...[
+                        Icon(
+                          widget.icon,
+                          color: Colors.white,
+                        ),
+
+                        const SizedBox(width: 10),
+                      ],
+
+                      Text(
+                        widget.text,
+                        style: AppTextStyles.body.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

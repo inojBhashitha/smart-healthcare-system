@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../core/theme/app_colors.dart';
-import '../core/theme/app_radius.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_radius.dart';
 
 class GlassCard extends StatelessWidget {
 
@@ -33,16 +33,25 @@ class GlassCard extends StatelessWidget {
           padding: const EdgeInsets.all(24),
 
           decoration: BoxDecoration(
+  color: AppColors.card.withOpacity(.65),
 
-            color: AppColors.card.withOpacity(.65),
+  borderRadius:
+      BorderRadius.circular(AppRadius.large),
 
-            borderRadius:
-                BorderRadius.circular(AppRadius.large),
+  border: Border.all(
+    color: Colors.white.withOpacity(.08),
+    width: 1.2,
+  ),
 
-            border: Border.all(
-              color: Colors.white.withOpacity(.08),
-            ),
-          ),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.blue.withOpacity(.08),
+      blurRadius: 35,
+      spreadRadius: 2,
+      offset: const Offset(0, 20),
+    ),
+  ],
+),
 
           child: child,
         ),
