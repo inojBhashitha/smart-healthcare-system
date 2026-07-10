@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import '../../core/constants/api_constants.dart';
 import '../../core/network/dio_client.dart';
+import '../../models/prescription/prescription_details.dart';
 import '../../models/prescription/upload_prescription_response.dart';
 
 class PrescriptionService {
@@ -11,14 +12,11 @@ class PrescriptionService {
 
   Future<UploadPrescriptionResponse> uploadPrescription(
       File image) async {
-
     final formData = FormData.fromMap({
-
       "file": await MultipartFile.fromFile(
         image.path,
         filename: image.path.split('/').last,
       ),
-
     });
 
     final response = await _dio.post(
@@ -27,6 +25,17 @@ class PrescriptionService {
     );
 
     return UploadPrescriptionResponse.fromJson(
+      response.data,
+    );
+  }
+
+  Future<PrescriptionDetails> getPrescription(
+      int prescriptionId) async {
+    final response = await _dio.get(
+      "${ApiConstants.prescriptions}/$prescriptionId",
+    );
+
+    return PrescriptionDetails.fromJson(
       response.data,
     );
   }

@@ -14,4 +14,6 @@ class ApiConstants {
 
   static const String uploadPrescription =
     "/api/prescriptions/upload";
+
+  static const String prescriptions = "/api/prescriptions";
 }
