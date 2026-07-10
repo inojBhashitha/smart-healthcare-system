@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import java.io.File;
+import java.nio.file.Path;
+
 @RestController
 @RequestMapping("/api/prescriptions")
 public class PrescriptionUploadController {
@@ -45,10 +48,12 @@ public class PrescriptionUploadController {
         try {
 
             // Save uploaded image
-            String filename = fileStorageService.saveFile(file);
+            Path savedFile = fileStorageService.saveFile(file);
 
-            // Run OCR
-            String text = ocrService.extractText("uploads/" + filename);
+String filename = savedFile.getFileName().toString();
+
+String text = ocrService.extractText(savedFile.toFile());
+
 
             // Extract medicines
             List<MedicineInfo> medicines = medicineParser.parse(text);

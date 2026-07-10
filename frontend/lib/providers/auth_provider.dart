@@ -21,24 +21,37 @@ class AuthProvider extends ChangeNotifier {
 
 
   Future<void> login({
-    required String email,
-    required String password,
-  }) async {
-    _isLoading = true;
-    notifyListeners();
+  required String email,
+  required String password,
+}) async {
+  _isLoading = true;
+  notifyListeners();
 
-    try {
-      _authResponse = await _authService.login(
-        LoginRequest(
-          email: email,
-          password: password,
-        ),
-      );
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  try {
+    _authResponse = await _authService.login(
+      LoginRequest(
+        email: email,
+        password: password,
+      ),
+    );
+
+    // Save JWT
+    await TokenStorage.saveToken(
+      _authResponse!.token,
+    );
+
+    debugPrint("JWT Saved:");
+    debugPrint(_authResponse!.token);
+
+    final token = await TokenStorage.getToken();
+
+    debugPrint("Stored Token:");
+    debugPrint(token);
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
 
   Future<void> register({
     required String name,

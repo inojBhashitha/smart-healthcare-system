@@ -36,8 +36,7 @@ public class OcrController {
 
             file.transferTo(tempFile);
 
-            String text = ocrService.extractText(
-                    tempFile.getAbsolutePath());
+            String text = ocrService.extractText(tempFile);
 
             List<MedicineInfo> medicines =
                     medicineParser.parse(text);
