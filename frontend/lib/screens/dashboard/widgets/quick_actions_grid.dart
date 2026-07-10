@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'quick_action_card.dart';
 
+import '../../../core/routes/app_routes.dart';
+
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
 
@@ -25,7 +27,12 @@ class QuickActionsGrid extends StatelessWidget {
         QuickActionCard(
           title: "Upload",
           icon: Icons.upload_file,
-          onTap: () {},
+          onTap: () {
+  Navigator.pushNamed(
+    context,
+    AppRoutes.uploadPrescription,
+  );
+}
         ),
 
         QuickActionCard(

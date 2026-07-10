@@ -6,7 +6,10 @@ import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 @Service
 public class TesseractOcrService implements OcrService {
@@ -15,7 +18,7 @@ public class TesseractOcrService implements OcrService {
     private String tessDataPath;
 
     @Override
-    public String extractText(String imagePath) {
+    public String extractText(File imageFile) {
 
         ITesseract tesseract = new Tesseract();
 
@@ -23,9 +26,21 @@ public class TesseractOcrService implements OcrService {
         tesseract.setLanguage("eng");
 
         try {
-            return tesseract.doOCR(new File(imagePath));
 
-        } catch (TesseractException e) {
+            BufferedImage image = ImageIO.read(imageFile);
+
+            if (image == null) {
+                throw new RuntimeException("ImageIO could not read image.");
+            }
+
+            System.out.println("===== IMAGE INFO =====");
+            System.out.println("Width  : " + image.getWidth());
+            System.out.println("Height : " + image.getHeight());
+            System.out.println("======================");
+
+            return tesseract.doOCR(image);
+
+        } catch (IOException | TesseractException e) {
             throw new RuntimeException("OCR failed", e);
         }
     }
