@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/prescription_provider.dart';
+import '../../../widgets/prescription/status_card.dart';
+import '../../../widgets/prescription/ocr_text_card.dart';
+import '../../../widgets/prescription/medicine_card.dart';
 
 class PrescriptionDetailsScreen extends StatelessWidget {
   const PrescriptionDetailsScreen({super.key});
@@ -40,7 +43,11 @@ class PrescriptionDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text(prescription.status),
+            StatusCard(
+  status: prescription.status,
+  medicinesFound: prescription.medicinesFound,
+  uploadedAt: prescription.uploadedAt,
+),
 
             const SizedBox(height: 24),
 
@@ -70,9 +77,30 @@ class PrescriptionDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text(
-              prescription.extractedText,
-            ),
+            OcrTextCard(
+  text: prescription.extractedText,
+),
+
+const SizedBox(height: 24),
+
+const Text(
+  "Medicines",
+  style: TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
+const SizedBox(height: 12),
+
+...prescription.medicines.map(
+  (medicine) => Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: MedicineCard(
+      medicine: medicine,
+    ),
+  ),
+),
           ],
         ),
       ),
