@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../constants/api_constants.dart';
 import 'token_storage.dart';
+import '../exceptions/unauthorized_exception.dart';
 
 class DioClient {
   DioClient._();
@@ -18,15 +19,42 @@ class DioClient {
     ),
   )..interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final token = await TokenStorage.getToken();
+  onRequest: (options, handler) async {
 
-          if (token != null && token.isNotEmpty) {
-            options.headers["Authorization"] = "Bearer $token";
-          }
+    if (options.path == ApiConstants.login ||
+        options.path == ApiConstants.register) {
+      handler.next(options);
+      return;
+    }
 
-          handler.next(options);
-        },
-      ),
+    final token = await TokenStorage.getToken();
+
+    if (token != null && token.isNotEmpty) {
+      options.headers["Authorization"] =
+          "Bearer $token";
+    }
+
+    handler.next(options);
+  },
+
+  onError: (error, handler) async {
+
+    if (error.response?.statusCode == 401) {
+
+      await TokenStorage.deleteToken();
+
+      handler.reject(
+        DioException(
+          requestOptions: error.requestOptions,
+          error: UnauthorizedException(),
+        ),
+      );
+
+      return;
+    }
+
+    handler.next(error);
+  },
+)
     );
 }

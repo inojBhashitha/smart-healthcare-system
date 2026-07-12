@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/prescription/upload_prescription_response.dart';
 import '../services/image/image_picker_service.dart';
 import '../services/prescription/prescription_service.dart';
+import '../models/prescription/prescription_details.dart';
 
 class PrescriptionProvider extends ChangeNotifier {
   final ImagePickerService _pickerService = ImagePickerService();
@@ -12,6 +13,11 @@ class PrescriptionProvider extends ChangeNotifier {
 
   File? _selectedImage;
   File? get selectedImage => _selectedImage;
+
+  PrescriptionDetails? _prescriptionDetails;
+
+PrescriptionDetails? get prescriptionDetails =>
+    _prescriptionDetails;
 
   bool _isUploading = false;
   bool get isUploading => _isUploading;
@@ -45,9 +51,33 @@ class PrescriptionProvider extends ChangeNotifier {
       _uploadResponse = await _prescriptionService.uploadPrescription(
         _selectedImage!,
       );
+    
+    if (_uploadResponse?.prescriptionId != null) {
+  await loadPrescription(
+    _uploadResponse!.prescriptionId!,
+  );
+
+  debugPrint("==============");
+  debugPrint(_prescriptionDetails!.status);
+  debugPrint(_prescriptionDetails!.extractedText);
+  debugPrint(
+      _prescriptionDetails!.medicines.length.toString());
+  debugPrint("==============");
+}
+
     } finally {
       _isUploading = false;
       notifyListeners();
     }
   }
+
+  Future<void> loadPrescription(int prescriptionId) async {
+
+  _prescriptionDetails =
+      await _prescriptionService.getPrescription(
+    prescriptionId,
+  );
+
+  notifyListeners();
+}
 }

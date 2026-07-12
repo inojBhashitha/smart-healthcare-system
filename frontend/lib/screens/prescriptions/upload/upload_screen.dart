@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/prescription_provider.dart';
 import 'widgets/image_preview.dart';
+import '../../../core/routes/app_routes.dart';
 
 class UploadScreen extends StatelessWidget {
   const UploadScreen({super.key});
@@ -48,20 +49,19 @@ class UploadScreen extends StatelessWidget {
   onRemove: provider.removeImage,
 
   onUpload: () async {
-    await provider.uploadPrescription();
+  await provider.uploadPrescription();
 
-    if (!context.mounted) return;
+  if (!context.mounted) return;
 
-    final response = provider.uploadResponse;
+  final response = provider.uploadResponse;
 
-    if (response != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response.message),
-        ),
-      );
-    }
-  },
+  if (response != null) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.prescriptionDetails,
+    );
+  }
+},
 ),
     );
   },
