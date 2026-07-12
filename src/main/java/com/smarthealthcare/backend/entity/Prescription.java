@@ -30,6 +30,14 @@ public class Prescription {
     private LocalDateTime uploadedAt;
 
     @OneToMany(
+        mappedBy = "prescription",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+)
+private List<PrescriptionInteraction> interactions =
+        new ArrayList<>();
+
+    @OneToMany(
             mappedBy = "prescription",
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -38,6 +46,15 @@ public class Prescription {
 
     public Prescription() {
     }
+
+    public List<PrescriptionInteraction> getInteractions() {
+    return interactions;
+}
+
+public void setInteractions(
+        List<PrescriptionInteraction> interactions) {
+    this.interactions = interactions;
+}
 
     public Long getPrescriptionId() {
         return prescriptionId;

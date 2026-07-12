@@ -12,8 +12,9 @@ class ApiConstants {
 
   static const String register = "/api/auth/register";
 
-  static const String uploadPrescription =
-    "/api/prescriptions/upload";
+  static const String uploadPrescription = "/api/prescriptions/upload";
 
   static const String prescriptions = "/api/prescriptions";
+
+  static const String dashboardStats = "/api/dashboard/stats";
 }

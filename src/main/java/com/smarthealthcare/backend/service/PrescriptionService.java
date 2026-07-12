@@ -14,19 +14,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.smarthealthcare.backend.entity.PrescriptionInteraction;
+import com.smarthealthcare.backend.repository.PrescriptionInteractionRepository;
+
 @Service
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
-    private final DrugInteractionService drugInteractionService;
+    private final PrescriptionInteractionRepository prescriptionInteractionRepository;
 
     public PrescriptionService(
-            PrescriptionRepository prescriptionRepository,
-            DrugInteractionService drugInteractionService) {
+        PrescriptionRepository prescriptionRepository,
+        PrescriptionInteractionRepository prescriptionInteractionRepository) {
 
-        this.prescriptionRepository = prescriptionRepository;
-        this.drugInteractionService = drugInteractionService;
-    }
+    this.prescriptionRepository = prescriptionRepository;
+    this.prescriptionInteractionRepository =
+            prescriptionInteractionRepository;
+}
 
     public List<PrescriptionSummaryResponse> getAllPrescriptions() {
 
@@ -83,17 +87,14 @@ public class PrescriptionService {
 
         response.setMedicines(medicineResponses);
 
-        // Check drug interactions
-        List<String> medicineNames =
-                prescription.getMedicines()
-                        .stream()
-                        .map(PrescriptionMedicine::getMedicineName)
-                        .toList();
-
         List<DrugInteractionResult> interactions =
-                drugInteractionService.checkInteractions(medicineNames);
+        prescriptionInteractionRepository
+                .findByPrescriptionPrescriptionId(id)
+                .stream()
+                .map(this::mapInteraction)
+                .toList();
 
-        response.setDrugInteractions(interactions);
+response.setDrugInteractions(interactions);
 
         return response;
     }
@@ -123,4 +124,14 @@ public class PrescriptionService {
                 databaseMedicine
         );
     }
+
+    private DrugInteractionResult mapInteraction(
+        PrescriptionInteraction interaction) {
+
+    return new DrugInteractionResult(
+            interaction.getDrug1(),
+            interaction.getDrug2(),
+            interaction.getDescription()
+    );
+}
 }

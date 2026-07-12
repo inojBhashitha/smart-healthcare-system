@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class StatusCard extends StatelessWidget {
   final String status;
@@ -43,6 +44,15 @@ class StatusCard extends StatelessWidget {
         return status;
     }
   }
+
+  String get formattedDate {
+
+  final date = DateTime.parse(uploadedAt);
+
+  return DateFormat(
+    "dd MMM yyyy • h:mm a",
+  ).format(date);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +125,7 @@ class StatusCard extends StatelessWidget {
 
                 Flexible(
                   child: Text(
-                    uploadedAt,
+                    formattedDate,
                     textAlign: TextAlign.end,
                   ),
                 ),

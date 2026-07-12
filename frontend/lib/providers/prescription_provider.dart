@@ -6,6 +6,7 @@ import '../models/prescription/upload_prescription_response.dart';
 import '../services/image/image_picker_service.dart';
 import '../services/prescription/prescription_service.dart';
 import '../models/prescription/prescription_details.dart';
+import '../models/prescription/prescription_summary.dart';
 
 class PrescriptionProvider extends ChangeNotifier {
   final ImagePickerService _pickerService = ImagePickerService();
@@ -18,6 +19,11 @@ class PrescriptionProvider extends ChangeNotifier {
 
 PrescriptionDetails? get prescriptionDetails =>
     _prescriptionDetails;
+
+    List<PrescriptionSummary> _prescriptions = [];
+
+List<PrescriptionSummary> get prescriptions =>
+    _prescriptions;
 
   bool _isUploading = false;
   bool get isUploading => _isUploading;
@@ -77,6 +83,19 @@ PrescriptionDetails? get prescriptionDetails =>
       await _prescriptionService.getPrescription(
     prescriptionId,
   );
+
+  notifyListeners();
+}
+Future<void> loadPrescriptions() async {
+
+  _prescriptions =
+      await _prescriptionService.getPrescriptions();
+
+  for (final prescription in _prescriptions) {
+    debugPrint(
+      "Prescription #${prescription.prescriptionId}",
+    );
+  }
 
   notifyListeners();
 }
