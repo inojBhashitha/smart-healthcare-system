@@ -702,9 +702,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      name,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.5),
+                    Flexible(
+                      child: Text(
+                        name,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.5),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Container(
@@ -1003,11 +1007,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Text(
                             displayName,
                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             email,
                             style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                           Container(
