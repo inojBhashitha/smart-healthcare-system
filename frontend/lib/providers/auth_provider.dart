@@ -18,6 +18,19 @@ class AuthProvider extends ChangeNotifier {
 
   AuthResponse? get authResponse => _authResponse;
 
+  String? _userName;
+
+  String? get userName => _userName;
+
+  AuthProvider() {
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    _userName = await TokenStorage.getUserName();
+    notifyListeners();
+  }
+
 
 
   Future<void> login({
@@ -39,6 +52,8 @@ class AuthProvider extends ChangeNotifier {
     await TokenStorage.saveToken(
       _authResponse!.token,
     );
+    _userName = _authResponse!.name;
+    await TokenStorage.saveUserName(_userName!);
 
     debugPrint("JWT Saved:");
     debugPrint(_authResponse!.token);
@@ -72,8 +87,10 @@ class AuthProvider extends ChangeNotifier {
       );
 
       await TokenStorage.saveToken(
-  _authResponse!.token,
-);
+        _authResponse!.token,
+      );
+      _userName = _authResponse!.name;
+      await TokenStorage.saveUserName(_userName!);
 
     } finally {
       _isLoading = false;
@@ -82,12 +99,13 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-  await TokenStorage.deleteToken();
+    await TokenStorage.deleteToken();
+    await TokenStorage.deleteUserName();
+    _userName = null;
+    _authResponse = null;
 
-  _authResponse = null;
-
-  notifyListeners();
-}
+    notifyListeners();
+  }
 
 Future<bool> isLoggedIn() async {
   return await TokenStorage.hasToken();

@@ -52,7 +52,8 @@ public class AuthServiceImpl implements AuthService {
 
         return new AuthResponse(
                 "",
-                "User registered successfully"
+                "User registered successfully",
+                user.getName()
         );
     }
 
@@ -67,10 +68,13 @@ public class AuthServiceImpl implements AuthService {
         );
 
         String token = jwtService.generateToken(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         return new AuthResponse(
                 token,
-                "Login successful"
+                "Login successful",
+                user.getName()
         );
     }
 }

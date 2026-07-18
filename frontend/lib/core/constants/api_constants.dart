@@ -2,7 +2,7 @@ class ApiConstants {
   ApiConstants._();
 
   /// Change this to your computer's IP address
-  static const String host = "192.168.20.164";
+  static const String host = "192.168.8.159";
 
   static const int port = 8080;
 

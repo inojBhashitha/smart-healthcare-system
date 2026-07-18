@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../providers/auth_provider.dart';
 import 'widgets/dashboard_header.dart';
 import 'widgets/quick_actions_grid.dart';
 import 'widgets/stat_card.dart';
@@ -29,9 +31,9 @@ class DashboardScreen extends StatelessWidget {
                   delegate: SliverChildListDelegate(
                     [
 
-                      const DashboardHeader(
-                       userName: "Inoj",
-                                           ),
+                      DashboardHeader(
+                        userName: (context.watch<AuthProvider>().userName ?? "Guest").split(" ").first,
+                      ),
 
                       const SizedBox(height: AppSpacing.xxl),
 

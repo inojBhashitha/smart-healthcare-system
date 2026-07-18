@@ -7,6 +7,7 @@ class TokenStorage {
       FlutterSecureStorage();
 
   static const String _tokenKey = "jwt_token";
+  static const String _userNameKey = "user_name";
 
   static Future<void> saveToken(String token) async {
     await _storage.write(
@@ -28,4 +29,19 @@ class TokenStorage {
       key: _tokenKey,
     );
   }
-}
+
+  static Future<void> saveUserName(String name) async {
+    await _storage.write(
+      key: _userNameKey,
+      value: name,
+    );
+  }
+
+  static Future<String?> getUserName() async {
+    return await _storage.read(key: _userNameKey);
+  }
+
+  static Future<void> deleteUserName() async {
+    await _storage.delete(key: _userNameKey);
+  }
+}
