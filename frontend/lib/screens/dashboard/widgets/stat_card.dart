@@ -24,8 +24,8 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: 130,
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        height: 140,
+        padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
