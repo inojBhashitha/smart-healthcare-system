@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_radius.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -34,71 +34,63 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         if (widget.label != null) ...[
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               widget.label!,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+              style: GoogleFonts.inter(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+                letterSpacing: 0.2,
               ),
             ),
           ),
         ],
 
         AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.medium),
-
+            borderRadius: BorderRadius.circular(14),
             boxShadow: isFocused
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: .20),
+                      color: AppColors.primary.withValues(alpha: 0.22),
                       blurRadius: 20,
-                      spreadRadius: 2,
+                      offset: const Offset(0, 4),
                     ),
                   ]
                 : [],
           ),
-
           child: Focus(
-            onFocusChange: (focus) {
-              setState(() {
-                isFocused = focus;
-              });
-            },
-
+            onFocusChange: (focus) => setState(() => isFocused = focus),
             child: TextField(
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               obscureText: widget.isPassword ? obscure : false,
-
-              style: const TextStyle(
+              style: GoogleFonts.inter(
                 color: AppColors.textPrimary,
+                fontSize: 15,
+                letterSpacing: -0.2,
               ),
-
+              cursorColor: AppColors.primary,
+              cursorWidth: 2,
               decoration: InputDecoration(
                 hintText: widget.hintText,
-
+                hintStyle: GoogleFonts.inter(
+                  color: AppColors.textDisabled,
+                  fontSize: 15,
+                ),
                 prefixIcon: Icon(
                   widget.prefixIcon,
-                  color: isFocused
-                      ? AppColors.primary
-                      : AppColors.textSecondary,
+                  color: isFocused ? AppColors.primary : AppColors.textSecondary,
+                  size: 20,
                 ),
-
                 suffixIcon: widget.isPassword
                     ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obscure = !obscure;
-                          });
-                        },
+                        onPressed: () => setState(() => obscure = !obscure),
                         icon: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           child: Icon(
@@ -107,37 +99,30 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 : Icons.visibility_rounded,
                             key: ValueKey(obscure),
                             color: AppColors.textSecondary,
+                            size: 20,
                           ),
                         ),
                       )
                     : null,
-
                 filled: true,
                 fillColor: AppColors.surface,
-
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
+                  horizontal: 18,
+                  vertical: 18,
                 ),
-
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppRadius.medium),
+                  borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
                 ),
-
                 enabledBorder: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppRadius.medium),
+                  borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide(
-                    color: Colors.white.withValues(alpha: .05),
+                    color: Colors.white.withValues(alpha: 0.07),
+                    width: 1.0,
                   ),
                 ),
-
-
                 focusedBorder: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppRadius.medium),
+                  borderRadius: BorderRadius.circular(14),
                   borderSide: const BorderSide(
                     color: AppColors.primary,
                     width: 1.5,

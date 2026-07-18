@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-import '../../../core/theme/app_text_styles.dart';
 import '../../../widgets/app_logo.dart';
 
 class AuthHeader extends StatelessWidget {
@@ -17,23 +18,33 @@ class AuthHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const AppLogo(),
 
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.xl),
 
         Text(
           title,
-          style: AppTextStyles.headline,
-          textAlign: TextAlign.center,
+          style: GoogleFonts.inter(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w800,
+            fontSize: 30,
+            letterSpacing: -0.8,
+            height: 1.1,
+          ),
         ),
 
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: 8),
 
         Text(
           subtitle,
-          style: AppTextStyles.caption,
-          textAlign: TextAlign.center,
+          style: GoogleFonts.inter(
+            color: AppColors.textSecondary,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.2,
+          ),
         ),
       ],
     );

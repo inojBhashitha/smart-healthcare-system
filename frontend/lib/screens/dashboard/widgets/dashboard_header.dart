@@ -1,108 +1,122 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_gradients.dart';
 import '../../../core/theme/app_spacing.dart';
-import '../../../core/theme/app_text_styles.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String userName;
 
-  const DashboardHeader({
-    super.key,
-    required this.userName,
-  });
+  const DashboardHeader({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
-    final nameParts = userName.trim().split(" ");
-    String initials = "JD";
-    if (nameParts.isNotEmpty && nameParts.first.isNotEmpty) {
-      if (nameParts.length > 1 && nameParts[1].isNotEmpty) {
-        initials = "${nameParts[0][0]}${nameParts[1][0]}".toUpperCase();
-      } else {
-        initials = nameParts[0][0].toUpperCase();
-      }
-    }
+    final firstName = userName.trim().split(' ').first;
+    final nameParts = userName.trim().split(' ');
+    final initials = nameParts.length > 1
+        ? ''.toUpperCase()
+        : (nameParts.isNotEmpty ? nameParts[0][0].toUpperCase() : 'U');
+
+    final hour = DateTime.now().hour;
+    final greeting = hour < 12
+        ? 'Good Morning'
+        : hour < 17
+            ? 'Good Afternoon'
+            : 'Good Evening';
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Initials Avatar
+        // Premium avatar with gradient ring
         Container(
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.all(2.5),
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             gradient: AppGradients.primary,
           ),
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: AppColors.primary,
-            child: Text(
-              initials,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+          child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.background,
+            ),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: AppColors.card,
+              child: Text(
+                initials,
+                style: GoogleFonts.inter(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  letterSpacing: -0.5,
+                ),
               ),
             ),
           ),
         ),
+
         const SizedBox(width: AppSpacing.md),
+
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hello, $userName",
-                style: AppTextStyles.headline.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                  letterSpacing: -0.5,
+                greeting,
+                style: GoogleFonts.inter(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.2,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 1),
               Text(
-                "Complete your dosage today",
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11.5,
+                firstName,
+                style: GoogleFonts.inter(
+                  color: AppColors.textPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
                 ),
               ),
             ],
           ),
         ),
+
+        // Notification bell with pulsing red dot
         Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
+              width: 42,
+              height: 42,
               decoration: BoxDecoration(
                 color: AppColors.card,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.divider,
+                  color: Colors.white.withValues(alpha: 0.08),
                   width: 1,
                 ),
               ),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_none_rounded,
-                  color: AppColors.textPrimary,
-                  size: 24,
-                ),
+              child: const Icon(
+                Icons.notifications_outlined,
+                color: AppColors.textPrimary,
+                size: 22,
               ),
             ),
             Positioned(
-              right: 2,
-              top: 2,
+              right: 8,
+              top: 8,
               child: Container(
-                width: 10,
-                height: 10,
-                decoration: const BoxDecoration(
+                width: 9,
+                height: 9,
+                decoration: BoxDecoration(
                   color: AppColors.danger,
                   shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.background, width: 1.5),
                 ),
               ),
             ),
@@ -112,4 +126,3 @@ class DashboardHeader extends StatelessWidget {
     );
   }
 }
-

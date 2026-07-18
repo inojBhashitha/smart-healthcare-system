@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_spacing.dart';
 
 class OverviewModuleCard extends StatefulWidget {
   final String title;
@@ -30,7 +29,7 @@ class _OverviewModuleCardState extends State<OverviewModuleCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _scale = 0.96),
+      onTapDown: (_) => setState(() => _scale = 0.95),
       onTapUp: (_) {
         setState(() => _scale = 1.0);
         widget.onTap();
@@ -38,17 +37,26 @@ class _OverviewModuleCardState extends State<OverviewModuleCard> {
       onTapCancel: () => setState(() => _scale = 1.0),
       child: AnimatedScale(
         scale: _scale,
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 130),
+        curve: Curves.easeOutBack,
         child: Container(
-          height: 125,
-          padding: const EdgeInsets.all(AppSpacing.md),
+          height: 130,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: widget.themeColor.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(AppRadius.large),
+            // Deep card with tinted glow from theme color
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: widget.themeColor.withValues(alpha: 0.15),
-              width: 1.5,
+              color: widget.themeColor.withValues(alpha: 0.18),
+              width: 1.2,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: widget.themeColor.withValues(alpha: 0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,42 +64,52 @@ class _OverviewModuleCardState extends State<OverviewModuleCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Floating icon pill
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(9),
                     decoration: BoxDecoration(
-                      color: widget.themeColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
+                      color: widget.themeColor.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       widget.icon,
                       color: widget.themeColor,
-                      size: 20,
+                      size: 19,
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: widget.themeColor,
-                    size: 14,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 7, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: widget.themeColor.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: widget.themeColor,
+                      size: 13,
+                    ),
                   ),
                 ],
               ),
               const Spacer(),
               Text(
                 widget.title,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 widget.subtitle,
-                style: const TextStyle(
+                style: GoogleFonts.inter(
                   color: AppColors.textSecondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
+                  letterSpacing: 0.1,
                 ),
               ),
             ],
