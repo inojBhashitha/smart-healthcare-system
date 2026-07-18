@@ -67,11 +67,12 @@ class _CustomButtonState extends State<CustomButton> {
             boxShadow: [
 
               BoxShadow(
-                color: Colors.blue.withOpacity(.35),
+                color: Colors.blue.withValues(alpha: .35),
                 blurRadius: 25,
                 offset: const Offset(0, 12),
               ),
             ],
+
           ),
 
           child: Center(

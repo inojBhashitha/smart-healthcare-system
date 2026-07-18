@@ -25,7 +25,7 @@ class UploadDropZone extends StatelessWidget {
           color: AppColors.card,
           borderRadius: BorderRadius.circular(AppRadius.large),
           border: Border.all(
-            color: AppColors.primary.withOpacity(.4),
+            color: AppColors.primary.withValues(alpha: .4),
             width: 2,
           ),
         ),
@@ -60,7 +60,8 @@ class UploadDropZone extends StatelessWidget {
                 vertical: AppSpacing.sm,
               ),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(.12),
+                color: AppColors.primary.withValues(alpha: .12),
+
                 borderRadius: BorderRadius.circular(50),
               ),
               child: const Text(
