@@ -52,12 +52,6 @@ class SmartHealthcareApp extends StatelessWidget {
       navigatorObservers: [
         ConsoleNavigationObserver(),
       ],
-      builder: (context, child) {
-        return ResponsiveDeviceFrame(
-          navigatorKey: navigatorKey,
-          child: child!,
-        );
-      },
     );
   }
 }
