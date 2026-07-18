@@ -15,44 +15,59 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hour = DateTime.now().hour;
-    String greeting;
-    if (hour < 12) {
-      greeting = "Good Morning 🌅";
-    } else if (hour < 17) {
-      greeting = "Good Afternoon ☀️";
-    } else {
-      greeting = "Good Evening 🌙";
+    final nameParts = userName.trim().split(" ");
+    String initials = "JD";
+    if (nameParts.isNotEmpty && nameParts.first.isNotEmpty) {
+      if (nameParts.length > 1 && nameParts[1].isNotEmpty) {
+        initials = "${nameParts[0][0]}${nameParts[1][0]}".toUpperCase();
+      } else {
+        initials = nameParts[0][0].toUpperCase();
+      }
     }
 
     return Row(
       children: [
+        // Initials Avatar
+        Container(
+          padding: const EdgeInsets.all(2),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: AppGradients.primary,
+          ),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: AppColors.primary,
+            child: Text(
+              initials,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                greeting,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                userName,
+                "Hello, $userName",
                 style: AppTextStyles.headline.copyWith(
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontSize: 17,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: AppSpacing.xs),
+              const SizedBox(height: 2),
               Text(
-                "Clinical Decision Support System",
+                "Complete your dosage today",
                 style: AppTextStyles.caption.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 11.5,
                 ),
               ),
             ],
@@ -93,23 +108,8 @@ class DashboardHeader extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(width: AppSpacing.md),
-        Container(
-          padding: const EdgeInsets.all(2),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: AppGradients.primary,
-          ),
-          child: const CircleAvatar(
-            radius: 22,
-            backgroundColor: AppColors.card,
-            child: Icon(
-              Icons.person_rounded,
-              color: AppColors.textPrimary,
-            ),
-          ),
-        ),
       ],
     );
   }
-}
+}
+
