@@ -7,6 +7,10 @@ import 'core/theme/app_theme.dart';
 import 'providers/auth_provider.dart';
 import 'providers/prescription_provider.dart';
 
+import 'core/services/console_logger.dart';
+import 'core/services/notification_service.dart';
+import 'core/widgets/responsive_device_frame.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -16,10 +20,15 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
         ),
-
         ChangeNotifierProvider(
-  create: (_) => PrescriptionProvider(),
-),
+          create: (_) => PrescriptionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ConsoleLogger(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NotificationService(),
+        ),
       ],
       child: const SmartHealthcareApp(),
     ),
@@ -27,20 +36,28 @@ void main() {
 }
 
 class SmartHealthcareApp extends StatelessWidget {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   const SmartHealthcareApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Smart Healthcare',
-
       debugShowCheckedModeBanner: false,
-
       theme: AppTheme.darkTheme,
-
+      navigatorKey: navigatorKey,
       initialRoute: AppRoutes.splash,
-
       onGenerateRoute: AppRouter.generateRoute,
+      navigatorObservers: [
+        ConsoleNavigationObserver(),
+      ],
+      builder: (context, child) {
+        return ResponsiveDeviceFrame(
+          navigatorKey: navigatorKey,
+          child: child!,
+        );
+      },
     );
   }
-}
+}
