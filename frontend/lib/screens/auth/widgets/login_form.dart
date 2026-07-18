@@ -8,6 +8,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/inputs/custom_text_field.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../core/utils/app_snackbars.dart';
 import 'social_button.dart';
 
 class LoginForm extends StatefulWidget {
@@ -32,9 +33,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> login() async {
     if (emailController.text.trim().isEmpty || passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter email and password")),
-      );
+      AppSnackbars.showError(context, "Please enter email and password");
       return;
     }
 
@@ -47,15 +46,11 @@ class _LoginFormState extends State<LoginForm> {
           );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login Successful")),
-      );
+      AppSnackbars.showSuccess(context, "Login Successful");
       Navigator.pushReplacementNamed(context, AppRoutes.dashboard);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      AppSnackbars.showError(context, e.toString());
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
