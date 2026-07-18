@@ -3,5 +3,8 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "java.project.importRoots": [
         "./backend"
+    ],
+    "dart.projectSearchPaths": [
+        "frontend"
     ]
 }
