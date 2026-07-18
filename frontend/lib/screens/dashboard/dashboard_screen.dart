@@ -6,9 +6,12 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/auth_provider.dart';
+import 'widgets/active_prescription_tracker.dart';
 import 'widgets/dashboard_header.dart';
+import 'widgets/next_dose_card.dart';
 import 'widgets/quick_actions_grid.dart';
 import 'widgets/stat_card.dart';
+import 'widgets/weekly_analytics_chart.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -73,6 +76,16 @@ class DashboardScreen extends StatelessWidget {
 
                       const SizedBox(height: AppSpacing.xxl),
 
+                      // Next Scheduled Dose Reminder
+                      const NextDoseCard(),
+
+                      const SizedBox(height: AppSpacing.lg),
+
+                      // Active Prescription Timeline Tracker
+                      const ActivePrescriptionTracker(),
+
+                      const SizedBox(height: AppSpacing.xxl),
+
 
                       Text(
                         "Today's Overview",
@@ -127,6 +140,11 @@ class DashboardScreen extends StatelessWidget {
                         ],
                       ),
 
+
+                      const SizedBox(height: AppSpacing.xxl),
+
+                      // Weekly Prescription Activity Analytics Chart
+                      const WeeklyAnalyticsChart(),
 
                       const SizedBox(height: AppSpacing.xxl),
 
