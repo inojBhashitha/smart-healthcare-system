@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/auth_provider.dart';
@@ -35,7 +37,42 @@ class DashboardScreen extends StatelessWidget {
                         userName: (context.watch<AuthProvider>().userName ?? "Guest").split(" ").first,
                       ),
 
+                      const SizedBox(height: AppSpacing.lg),
+
+                      // Premium Search Bar
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.card.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(AppRadius.medium),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: const TextField(
+                          readOnly: true,
+                          style: TextStyle(color: AppColors.textPrimary),
+                          decoration: InputDecoration(
+                            hintText: "Search prescriptions or medicines...",
+                            hintStyle: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: AppColors.textSecondary,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+
                       const SizedBox(height: AppSpacing.xxl),
+
 
                       Text(
                         "Today's Overview",
@@ -44,43 +81,52 @@ class DashboardScreen extends StatelessWidget {
 
                       const SizedBox(height: AppSpacing.lg),
 
-                      const Row(
+                      Row(
                         children: [
                           StatCard(
                             title: "Uploads",
                             value: "12",
-                            icon: Icons.upload_file,
+                            icon: Icons.upload_file_rounded,
+                            gradientColors: const [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                            shadowColor: const Color(0xFF2563EB),
                           ),
 
-                          SizedBox(width: AppSpacing.md),
+                          const SizedBox(width: AppSpacing.md),
 
                           StatCard(
                             title: "Verified",
                             value: "48",
-                            icon: Icons.verified,
+                            icon: Icons.verified_rounded,
+                            gradientColors: const [Color(0xFF10B981), Color(0xFF047857)],
+                            shadowColor: const Color(0xFF10B981),
                           ),
                         ],
                       ),
 
                       const SizedBox(height: AppSpacing.md),
 
-                      const Row(
+                      Row(
                         children: [
                           StatCard(
                             title: "Medicines",
                             value: "154",
-                            icon: Icons.medication,
+                            icon: Icons.medication_rounded,
+                            gradientColors: const [Color(0xFF6366F1), Color(0xFF4338CA)],
+                            shadowColor: const Color(0xFF6366F1),
                           ),
 
-                          SizedBox(width: AppSpacing.md),
+                          const SizedBox(width: AppSpacing.md),
 
                           StatCard(
                             title: "Alerts",
                             value: "3",
                             icon: Icons.warning_amber_rounded,
+                            gradientColors: const [Color(0xFFEF4444), Color(0xFFB91C1C)],
+                            shadowColor: const Color(0xFFEF4444),
                           ),
                         ],
                       ),
+
 
                       const SizedBox(height: AppSpacing.xxl),
 

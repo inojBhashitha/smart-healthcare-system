@@ -23,36 +23,40 @@ class QuickActionsGrid extends StatelessWidget {
       childAspectRatio: 1.3,
 
       children: [
-
         QuickActionCard(
           title: "Upload",
-          icon: Icons.upload_file,
+          icon: Icons.upload_file_rounded,
+          color: const Color(0xFF3B82F6),
           onTap: () {
-  Navigator.pushNamed(
-    context,
-    AppRoutes.uploadPrescription,
-  );
-}
+            Navigator.pushNamed(
+              context,
+              AppRoutes.uploadPrescription,
+            );
+          },
         ),
 
         QuickActionCard(
           title: "Prescriptions",
-          icon: Icons.description,
+          icon: Icons.description_rounded,
+          color: const Color(0xFF10B981),
           onTap: () {},
         ),
 
         QuickActionCard(
           title: "Interactions",
-          icon: Icons.medication,
+          icon: Icons.medication_liquid_rounded,
+          color: const Color(0xFFF59E0B),
           onTap: () {},
         ),
 
         QuickActionCard(
           title: "Profile",
-          icon: Icons.person,
+          icon: Icons.person_rounded,
+          color: const Color(0xFF8B5CF6),
           onTap: () {},
         ),
       ],
+
     );
   }
 }
