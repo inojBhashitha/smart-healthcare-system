@@ -52,13 +52,14 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(
       const Duration(seconds: 3),
       () {
-
+        if (!mounted) return;
         Navigator.pushReplacementNamed(
-    context,
-    AppRoutes.login,
-);
+          context,
+          AppRoutes.login,
+        );
       },
     );
+
   }
 
   @override
@@ -114,8 +115,16 @@ class _SplashScreenState extends State<SplashScreen>
                   height: AppSpacing.xxl,
                 ),
 
-                const CircularProgressIndicator(
-                  color: AppColors.primary,
+                SizedBox(
+                  width: 140,
+                  height: 3,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(99),
+                    child: const LinearProgressIndicator(
+                      color: AppColors.secondary,
+                      backgroundColor: Color(0xFF1E293B),
+                    ),
+                  ),
                 ),
               ],
             ),

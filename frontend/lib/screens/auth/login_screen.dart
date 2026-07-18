@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const AuthHeader(
+                    AuthHeader(
   title: "Welcome Back",
   subtitle: "Sign in to continue",
 ),

@@ -58,7 +58,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             boxShadow: isFocused
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(.20),
+                      color: AppColors.primary.withValues(alpha: .20),
                       blurRadius: 20,
                       spreadRadius: 2,
                     ),
@@ -130,9 +130,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   borderRadius:
                       BorderRadius.circular(AppRadius.medium),
                   borderSide: BorderSide(
-                    color: Colors.white.withOpacity(.05),
+                    color: Colors.white.withValues(alpha: .05),
                   ),
                 ),
+
 
                 focusedBorder: OutlineInputBorder(
                   borderRadius:

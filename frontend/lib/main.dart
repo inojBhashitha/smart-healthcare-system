@@ -16,10 +16,9 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
         ),
-
         ChangeNotifierProvider(
-  create: (_) => PrescriptionProvider(),
-),
+          create: (_) => PrescriptionProvider(),
+        ),
       ],
       child: const SmartHealthcareApp(),
     ),
@@ -27,20 +26,19 @@ void main() {
 }
 
 class SmartHealthcareApp extends StatelessWidget {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   const SmartHealthcareApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Smart Healthcare',
-
       debugShowCheckedModeBanner: false,
-
       theme: AppTheme.darkTheme,
-
+      navigatorKey: navigatorKey,
       initialRoute: AppRoutes.splash,
-
       onGenerateRoute: AppRouter.generateRoute,
     );
   }
-}
+}

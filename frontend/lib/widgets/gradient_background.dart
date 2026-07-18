@@ -23,7 +23,7 @@ class GradientBackground extends StatelessWidget {
             top: -150,
             right: -100,
             child: _blurCircle(
-              Colors.blue.withOpacity(0.30),
+              Colors.blue.withValues(alpha: 0.30),
               320,
             ),
           ),
@@ -32,10 +32,11 @@ class GradientBackground extends StatelessWidget {
             bottom: -180,
             left: -120,
             child: _blurCircle(
-              Colors.cyan.withOpacity(0.20),
+              Colors.cyan.withValues(alpha: 0.20),
               300,
             ),
           ),
+
 
           SafeArea(
             child: child,
