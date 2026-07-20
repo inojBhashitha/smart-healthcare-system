@@ -8,10 +8,14 @@ import '../../models/prescription/prescription_medicine.dart';
 
 class MedicineCard extends StatelessWidget {
   final PrescriptionMedicine medicine;
+  final VoidCallback? onToggleVerify;
+  final VoidCallback? onEdit;
 
   const MedicineCard({
     super.key,
     required this.medicine,
+    this.onToggleVerify,
+    this.onEdit,
   });
 
   @override
@@ -77,28 +81,67 @@ class MedicineCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.12),
+              if (onToggleVerify != null)
+                InkWell(
+                  onTap: onToggleVerify,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: statusColor.withValues(alpha: 0.2),
-                    width: 1,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: statusColor.withValues(alpha: 0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          verified ? Icons.check_circle_rounded : Icons.add_circle_outline_rounded,
+                          size: 12,
+                          color: statusColor,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          verified ? "Verified" : "Verify",
+                          style: TextStyle(
+                            color: statusColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: statusColor.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    verified ? "Verified" : "Pending",
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                child: Text(
-                  verified ? "Verified" : "Pending",
-                  style: TextStyle(
-                    color: statusColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),

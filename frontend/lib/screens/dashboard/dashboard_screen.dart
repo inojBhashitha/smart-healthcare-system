@@ -9,6 +9,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/prescription_provider.dart';
+import '../../services/medicine/medicine_service.dart';
 import '../../widgets/buttons/custom_button.dart';
 import 'widgets/active_prescription_tracker.dart';
 import 'widgets/compliance_wave_painter.dart';
@@ -185,32 +186,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 // Search Bar
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0F172A).withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(AppRadius.medium),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      width: 1.2,
+                GestureDetector(
+                  onTap: () async {
+                    try {
+                      final medicines = await MedicineService().getMedicines();
+                      if (context.mounted) {
+                        showSearch(
+                          context: context,
+                          delegate: _MedicineSearchDelegate(medicines: medicines),
+                        );
+                      }
+                    } catch (e) {
+                      debugPrint("Search error: $e");
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0F172A).withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(AppRadius.medium),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        width: 1.2,
+                      ),
                     ),
-                  ),
-                  child: const TextField(
-                    readOnly: true,
-                    style: TextStyle(color: AppColors.textPrimary),
-                    decoration: InputDecoration(
-                      hintText: "Search medicines, pharmacies...",
-                      hintStyle: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        color: AppColors.textSecondary,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md,
-                        vertical: 14,
+                    child: const AbsorbPointer(
+                      child: TextField(
+                        style: TextStyle(color: AppColors.textPrimary),
+                        decoration: InputDecoration(
+                          hintText: "Search medicines catalog...",
+                          hintStyle: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: AppColors.textSecondary,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: 14,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -1154,4 +1171,78 @@ class _MapGridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _MedicineSearchDelegate extends SearchDelegate {
+  final List<Map<String, dynamic>> medicines;
+
+  _MedicineSearchDelegate({required this.medicines});
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return ThemeData.dark().copyWith(
+      scaffoldBackgroundColor: const Color(0xFF070B19),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xFF0F172A),
+        elevation: 0,
+      ),
+    );
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      if (query.isNotEmpty)
+        IconButton(
+          icon: const Icon(Icons.clear_rounded),
+          onPressed: () => query = '',
+        ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) => _buildSearchResults();
+
+  @override
+  Widget buildSuggestions(BuildContext context) => _buildSearchResults();
+
+  Widget _buildSearchResults() {
+    final results = medicines.where((med) {
+      final name = (med['name'] ?? med['medicineName'] ?? '').toString().toLowerCase();
+      return name.contains(query.toLowerCase());
+    }).toList();
+
+    if (results.isEmpty) {
+      return const Center(
+        child: Text(
+          "No medicines found in catalog.",
+          style: TextStyle(color: AppColors.textSecondary),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final med = results[index];
+        final String name = med['name'] ?? med['medicineName'] ?? 'Unknown';
+        final String generic = med['genericName'] ?? med['category'] ?? '';
+
+        return ListTile(
+          leading: const Icon(Icons.medication_rounded, color: AppColors.primary),
+          title: Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          subtitle: generic.isNotEmpty ? Text(generic, style: const TextStyle(color: AppColors.textSecondary)) : null,
+          trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textDisabled),
+        );
+      },
+    );
+  }
 }

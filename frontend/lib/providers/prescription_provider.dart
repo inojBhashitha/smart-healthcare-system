@@ -97,4 +97,38 @@ class PrescriptionProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> verifyMedicine(int medicineId, bool verified) async {
+    try {
+      await _prescriptionService.verifyMedicine(medicineId, verified);
+      if (_prescriptionDetails != null) {
+        await loadPrescription(_prescriptionDetails!.prescriptionId);
+      }
+    } catch (e) {
+      debugPrint("Error verifying medicine: $e");
+    }
+  }
+
+  Future<void> updateMedicine({
+    required int medicineId,
+    required String medicineName,
+    required String strength,
+    required String instruction,
+    required bool verified,
+  }) async {
+    try {
+      await _prescriptionService.updateMedicine(
+        medicineId: medicineId,
+        medicineName: medicineName,
+        strength: strength,
+        instruction: instruction,
+        verified: verified,
+      );
+      if (_prescriptionDetails != null) {
+        await loadPrescription(_prescriptionDetails!.prescriptionId);
+      }
+    } catch (e) {
+      debugPrint("Error updating medicine: $e");
+    }
+  }
 }

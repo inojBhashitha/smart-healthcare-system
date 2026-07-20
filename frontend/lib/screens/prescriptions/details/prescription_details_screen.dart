@@ -97,6 +97,25 @@ class PrescriptionDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: AppSpacing.md),
                   child: MedicineCard(
                     medicine: medicine,
+                    onToggleVerify: () async {
+                      await provider.verifyMedicine(
+                        medicine.id,
+                        !medicine.verified,
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              medicine.verified
+                                  ? "${medicine.medicineName} marked as pending."
+                                  : "${medicine.medicineName} verified successfully!",
+                            ),
+                            backgroundColor: AppColors.success,
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

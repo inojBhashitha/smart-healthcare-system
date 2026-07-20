@@ -16,4 +16,14 @@ class ApiConstants {
     "/api/prescriptions/upload";
 
   static const String prescriptions = "/api/prescriptions";
+
+  static const String prescriptionMedicines = "/api/prescription-medicines";
+
+  static const String drugInteractionsCheck = "/api/drug-interactions/check";
+
+  static const String medicines = "/api/medicines";
+
+  static const String medicineValidation = "/api/medicine-validation";
+
+  static const String users = "/api/users";
 }

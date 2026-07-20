@@ -51,4 +51,29 @@ class PrescriptionService {
         .map((item) => PrescriptionSummary.fromJson(item))
         .toList();
   }
+
+  Future<void> verifyMedicine(int medicineId, bool verified) async {
+    await _dio.put(
+      "${ApiConstants.prescriptionMedicines}/$medicineId/verify",
+      data: {"verified": verified},
+    );
+  }
+
+  Future<void> updateMedicine({
+    required int medicineId,
+    required String medicineName,
+    required String strength,
+    required String instruction,
+    required bool verified,
+  }) async {
+    await _dio.put(
+      "${ApiConstants.prescriptionMedicines}/$medicineId",
+      data: {
+        "medicineName": medicineName,
+        "strength": strength,
+        "instruction": instruction,
+        "verified": verified,
+      },
+    );
+  }
 }
