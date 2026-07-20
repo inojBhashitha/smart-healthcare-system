@@ -9,6 +9,7 @@ import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/inputs/custom_text_field.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../core/utils/app_snackbars.dart';
+import 'mock_social_login.dart';
 import 'social_button.dart';
 
 class LoginForm extends StatefulWidget {
@@ -169,7 +170,7 @@ class _LoginFormState extends State<LoginForm> {
               child: SocialButton(
                 text: "Google",
                 icon: Icons.g_mobiledata_rounded,
-                onTap: () => AppSnackbars.showError(context, "Google Login will be available soon"),
+                onTap: () => MockSocialLogin.showAccountSelector(context, "Google"),
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -177,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
               child: SocialButton(
                 text: "Apple",
                 icon: Icons.apple_rounded,
-                onTap: () => AppSnackbars.showError(context, "Apple Login will be available soon"),
+                onTap: () => MockSocialLogin.showAccountSelector(context, "Apple"),
               ),
             ),
           ],

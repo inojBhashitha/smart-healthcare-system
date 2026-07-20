@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../providers/prescription_provider.dart';
 
 class NextDoseCard extends StatefulWidget {
   const NextDoseCard({super.key});
@@ -17,6 +19,24 @@ class _NextDoseCardState extends State<NextDoseCard> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<PrescriptionProvider>();
+    final details = provider.prescriptionDetails;
+    final hasMedicine = details != null && details.medicines.isNotEmpty;
+
+    final String medName = hasMedicine
+        ? details.medicines.first.medicineName
+        : "Panadol (Paracetamol)";
+    final String dosage = hasMedicine
+        ? (details.medicines.first.strength.isNotEmpty
+            ? details.medicines.first.strength
+            : "500mg")
+        : "500mg • 2 Tablets";
+    final String instructions = hasMedicine
+        ? (details.medicines.first.instruction.isNotEmpty
+            ? details.medicines.first.instruction
+            : "After Meals")
+        : "After Meals";
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -71,7 +91,7 @@ class _NextDoseCardState extends State<NextDoseCard> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "You took Panadol 500mg at 8:05 PM",
+                        "You took $medName",
                         style: AppTextStyles.caption.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -111,7 +131,7 @@ class _NextDoseCardState extends State<NextDoseCard> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "Panadol (Paracetamol)",
+                        medName,
                         style: AppTextStyles.title.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -121,7 +141,7 @@ class _NextDoseCardState extends State<NextDoseCard> {
                       Row(
                         children: [
                           Text(
-                            "500mg • 2 Tablets",
+                            dosage,
                             style: AppTextStyles.caption.copyWith(
                               color: AppColors.textSecondary,
                             ),
@@ -132,11 +152,15 @@ class _NextDoseCardState extends State<NextDoseCard> {
                             style: TextStyle(color: AppColors.textDisabled),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            "After Meals",
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: Text(
+                              instructions,
+                              style: AppTextStyles.caption.copyWith(
+                                color: AppColors.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -163,10 +187,10 @@ class _NextDoseCardState extends State<NextDoseCard> {
                       _isTaken = true;
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Medication recorded successfully!"),
+                      SnackBar(
+                        content: Text("Dose for $medName recorded!"),
                         backgroundColor: AppColors.success,
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                       ),
                     );
                   },

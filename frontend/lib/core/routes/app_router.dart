@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../screens/auth/login_screen.dart';
 import '../../screens/auth/register_screen.dart';
@@ -14,34 +14,22 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.splash:
-        return MaterialPageRoute(
-          builder: (_) => const SplashScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case AppRoutes.login:
-        return MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
-        );
+        return _buildAnimatedRoute(const LoginScreen(), settings);
 
       case AppRoutes.register:
-        return MaterialPageRoute(
-          builder: (_) => const RegisterScreen(),
-        );
+        return _buildAnimatedRoute(const RegisterScreen(), settings);
 
       case AppRoutes.dashboard:
-  return MaterialPageRoute(
-    builder: (_) => const DashboardScreen(),
-  );
+        return _buildAnimatedRoute(const DashboardScreen(), settings);
 
-  case AppRoutes.uploadPrescription:
-  return MaterialPageRoute(
-    builder: (_) => const UploadScreen(),
-  );
+      case AppRoutes.uploadPrescription:
+        return MaterialPageRoute(builder: (_) => const UploadScreen());
 
-  case AppRoutes.prescriptionDetails:
-  return MaterialPageRoute(
-    builder: (_) => const PrescriptionDetailsScreen(),
-  );
+      case AppRoutes.prescriptionDetails:
+        return MaterialPageRoute(builder: (_) => const PrescriptionDetailsScreen());
 
       default:
         return MaterialPageRoute(
@@ -52,5 +40,29 @@ class AppRouter {
           ),
         );
     }
+  }
+
+  // Premium page transition (Fade + Scale)
+  static PageRouteBuilder _buildAnimatedRoute(Widget page, RouteSettings settings) {
+    return PageRouteBuilder(
+      settings: settings,
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionDuration: const Duration(milliseconds: 600),
+      reverseTransitionDuration: const Duration(milliseconds: 600),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curve = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutQuart,
+          reverseCurve: Curves.easeInQuart,
+        );
+        return FadeTransition(
+          opacity: curve,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curve),
+            child: child,
+          ),
+        );
+      },
+    );
   }
 }

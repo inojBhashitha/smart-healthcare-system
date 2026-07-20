@@ -8,6 +8,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/prescription_provider.dart';
 import '../../widgets/buttons/custom_button.dart';
 import 'widgets/active_prescription_tracker.dart';
 import 'widgets/compliance_wave_painter.dart';
@@ -24,6 +25,14 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PrescriptionProvider>().fetchPrescriptions();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await Future.delayed(
-              const Duration(seconds: 1),
-            );
+            await context.read<PrescriptionProvider>().fetchPrescriptions();
           },
           child: bodyView,
         ),
@@ -329,8 +336,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: OverviewModuleCard(
-                            title: "0",
-                            subtitle: "Reservations",
+                            title: "${context.watch<PrescriptionProvider>().prescriptions.length}",
+                            subtitle: "Prescriptions",
                             icon: Icons.grid_view_rounded,
                             themeColor: const Color(0xFF8B5CF6),
                             onTap: () {

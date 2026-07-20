@@ -1,22 +1,116 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../providers/prescription_provider.dart';
 
 class ActivePrescriptionTracker extends StatelessWidget {
   const ActivePrescriptionTracker({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Demo steps data
+    final provider = context.watch<PrescriptionProvider>();
+    final prescriptions = provider.prescriptions;
+    final latestDetails = provider.prescriptionDetails;
+
+    if (prescriptions.isEmpty && latestDetails == null) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          color: AppColors.card.withValues(alpha: 0.75),
+          borderRadius: BorderRadius.circular(AppRadius.large),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.05),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.document_scanner_rounded,
+                color: AppColors.primary,
+                size: 26,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "No Active Prescriptions",
+                    style: AppTextStyles.title.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    "Upload a prescription document to view real-time OCR status",
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final int prescriptionId = latestDetails?.prescriptionId ??
+        (prescriptions.isNotEmpty ? prescriptions.first.prescriptionId : 0);
+    final String statusStr = (latestDetails?.status ??
+            (prescriptions.isNotEmpty ? prescriptions.first.status : "PENDING"))
+        .toUpperCase();
+    final String uploadedAt = latestDetails?.uploadedAt ??
+        (prescriptions.isNotEmpty ? prescriptions.first.uploadedAt : "");
+
+    // Determine steps statuses based on backend status
+    StepStatus step1 = StepStatus.completed; // Uploaded
+    StepStatus step2 = StepStatus.completed; // OCR Scanned
+    StepStatus step3 = StepStatus.completed; // Drug Check
+    StepStatus step4 = StepStatus.completed; // Verified
+
+    if (statusStr == "PENDING") {
+      step2 = StepStatus.active;
+      step3 = StepStatus.pending;
+      step4 = StepStatus.pending;
+    } else if (statusStr == "OCR_PROCESSED" || statusStr == "PROCESSING") {
+      step2 = StepStatus.completed;
+      step3 = StepStatus.active;
+      step4 = StepStatus.pending;
+    } else if (statusStr == "VERIFIED" || statusStr == "COMPLETED") {
+      step2 = StepStatus.completed;
+      step3 = StepStatus.completed;
+      step4 = StepStatus.completed;
+    }
+
     final List<Map<String, dynamic>> steps = [
-      {"title": "Uploaded", "status": StepStatus.completed},
-      {"title": "OCR Scanned", "status": StepStatus.completed},
-      {"title": "Drug Check", "status": StepStatus.active},
-      {"title": "Verified", "status": StepStatus.pending},
+      {"title": "Uploaded", "status": step1},
+      {"title": "OCR Scanned", "status": step2},
+      {"title": "Drug Check", "status": step3},
+      {"title": "Verified", "status": step4},
     ];
+
+    Color statusBadgeColor = AppColors.warning;
+    if (statusStr == "COMPLETED" || statusStr == "VERIFIED") {
+      statusBadgeColor = AppColors.success;
+    } else if (statusStr == "PENDING") {
+      statusBadgeColor = AppColors.primary;
+    }
 
     return Container(
       width: double.infinity,
@@ -41,39 +135,42 @@ class ActivePrescriptionTracker extends StatelessWidget {
         children: [
           Row(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Latest Scan Status",
-                    style: AppTextStyles.title.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Latest Scan Status",
+                      style: AppTextStyles.title.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "Prescription #3892 • General Hospital",
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textSecondary,
+                    const SizedBox(height: 2),
+                    Text(
+                      "Prescription #$prescriptionId ${uploadedAt.isNotEmpty ? "• $uploadedAt" : ""}",
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withValues(alpha: 0.12),
+                  color: statusBadgeColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  "Processing",
+                  statusStr,
                   style: AppTextStyles.caption.copyWith(
-                    color: AppColors.warning,
+                    color: statusBadgeColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 11,
                   ),
@@ -166,7 +263,6 @@ class ActivePrescriptionTracker extends StatelessWidget {
       return Stack(
         alignment: Alignment.center,
         children: [
-          // Outer glowing ring
           Container(
             width: 28,
             height: 28,
@@ -175,7 +271,6 @@ class ActivePrescriptionTracker extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          // Intermediate ring
           Container(
             width: 20,
             height: 20,
@@ -184,7 +279,6 @@ class ActivePrescriptionTracker extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          // Inner core dot
           Container(
             width: 8,
             height: 8,

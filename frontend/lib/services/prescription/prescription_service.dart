@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import '../../core/constants/api_constants.dart';
 import '../../core/network/dio_client.dart';
 import '../../models/prescription/prescription_details.dart';
+import '../../models/prescription/prescription_summary.dart';
 import '../../models/prescription/upload_prescription_response.dart';
 
 class PrescriptionService {
@@ -38,5 +39,16 @@ class PrescriptionService {
     return PrescriptionDetails.fromJson(
       response.data,
     );
+  }
+
+  Future<List<PrescriptionSummary>> getPrescriptions() async {
+    final response = await _dio.get(
+      ApiConstants.prescriptions,
+    );
+
+    final List list = response.data as List? ?? [];
+    return list
+        .map((item) => PrescriptionSummary.fromJson(item))
+        .toList();
   }
 }

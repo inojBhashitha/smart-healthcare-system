@@ -66,18 +66,21 @@ class _LoginScreenState extends State<LoginScreen>
                   opacity: _fadeAnim,
                   child: SlideTransition(
                     position: _slideAnim,
-                    child: const GlassCard(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          AuthHeader(
-                            title: "Welcome Back",
-                            subtitle: "Sign in to continue to MediSync",
-                          ),
-                          SizedBox(height: AppSpacing.xxl),
-                          LoginForm(),
-                        ],
+                    child: SizedBox(
+                      height: 680,
+                      child: GlassCard(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: const [
+                            AuthHeader(
+                              title: "Welcome Back",
+                              subtitle: "Sign in to continue to MediSync",
+                            ),
+                            SizedBox(height: AppSpacing.xxl),
+                            LoginForm(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
