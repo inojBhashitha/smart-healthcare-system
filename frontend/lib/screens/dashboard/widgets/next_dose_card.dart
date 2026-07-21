@@ -5,7 +5,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../models/reminder/reminder_model.dart';
 import '../../../providers/prescription_provider.dart';
+import '../../../providers/reminder_provider.dart';
 
 class NextDoseCard extends StatefulWidget {
   const NextDoseCard({super.key});
@@ -15,27 +17,27 @@ class NextDoseCard extends StatefulWidget {
 }
 
 class _NextDoseCardState extends State<NextDoseCard> {
-  bool _isTaken = false;
-
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<PrescriptionProvider>();
-    final details = provider.prescriptionDetails;
+    final reminderProvider = context.watch<ReminderProvider>();
+    final prescriptionProvider = context.watch<PrescriptionProvider>();
+    final details = prescriptionProvider.prescriptionDetails;
+
+    final nextReminder = reminderProvider.nextReminder;
     final hasMedicine = details != null && details.medicines.isNotEmpty;
 
-    final String medName = hasMedicine
-        ? details.medicines.first.medicineName
-        : "Panadol (Paracetamol)";
-    final String dosage = hasMedicine
-        ? (details.medicines.first.strength.isNotEmpty
-            ? details.medicines.first.strength
-            : "500mg")
-        : "500mg • 2 Tablets";
-    final String instructions = hasMedicine
-        ? (details.medicines.first.instruction.isNotEmpty
-            ? details.medicines.first.instruction
-            : "After Meals")
-        : "After Meals";
+    final String medName = nextReminder?.medicineName ??
+        (hasMedicine ? details.medicines.first.medicineName : "Panadol (Paracetamol)");
+    final String dosage = nextReminder?.dosage ??
+        (hasMedicine
+            ? (details.medicines.first.strength.isNotEmpty ? details.medicines.first.strength : "500mg")
+            : "500mg • 2 Tablets");
+    final String instructions = nextReminder?.instructions ??
+        (hasMedicine
+            ? (details.medicines.first.instruction.isNotEmpty ? details.medicines.first.instruction : "After Meals")
+            : "After Meals");
+    final String timeStr = nextReminder?.time ?? "8:00 PM";
+    final bool isTaken = nextReminder?.isTaken ?? false;
 
     return Container(
       width: double.infinity,
@@ -44,14 +46,14 @@ class _NextDoseCardState extends State<NextDoseCard> {
         color: AppColors.card.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(AppRadius.large),
         border: Border.all(
-          color: _isTaken
+          color: isTaken
               ? AppColors.success.withValues(alpha: 0.2)
               : Colors.white.withValues(alpha: 0.05),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: _isTaken
+            color: isTaken
                 ? AppColors.success.withValues(alpha: 0.05)
                 : Colors.black.withValues(alpha: 0.2),
             blurRadius: 16,
@@ -61,25 +63,51 @@ class _NextDoseCardState extends State<NextDoseCard> {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: _isTaken
-                  ? AppColors.success.withValues(alpha: 0.12)
-                  : AppColors.primary.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              _isTaken ? Icons.check_circle_rounded : Icons.alarm_rounded,
-              color: _isTaken ? AppColors.success : AppColors.primary,
-              size: 28,
+          GestureDetector(
+            onTap: () async {
+              final TimeOfDay? picked = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (picked != null && context.mounted) {
+                final formatted = picked.format(context);
+                reminderProvider.addReminder(
+                  ReminderModel(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    medicineName: medName,
+                    dosage: dosage,
+                    time: formatted,
+                    instructions: instructions,
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Alarm scheduled for $medName at $formatted!"),
+                    backgroundColor: AppColors.primary,
+                  ),
+                );
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isTaken
+                    ? AppColors.success.withValues(alpha: 0.12)
+                    : AppColors.primary.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                isTaken ? Icons.check_circle_rounded : Icons.alarm_add_rounded,
+                color: isTaken ? AppColors.success : AppColors.primary,
+                size: 28,
+              ),
             ),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _isTaken
+              children: isTaken
                   ? [
                       const Text(
                         "Dose Completed!",
@@ -91,7 +119,7 @@ class _NextDoseCardState extends State<NextDoseCard> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "You took $medName",
+                        "You took $medName at $timeStr",
                         style: AppTextStyles.caption.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -118,9 +146,9 @@ class _NextDoseCardState extends State<NextDoseCard> {
                               color: AppColors.warning.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Text(
-                              "In 2 hours",
-                              style: TextStyle(
+                            child: Text(
+                              timeStr,
+                              style: const TextStyle(
                                 color: AppColors.warning,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
@@ -169,12 +197,12 @@ class _NextDoseCardState extends State<NextDoseCard> {
             ),
           ),
           const SizedBox(width: AppSpacing.md),
-          _isTaken
+          isTaken
               ? IconButton(
                   onPressed: () {
-                    setState(() {
-                      _isTaken = false;
-                    });
+                    if (nextReminder != null) {
+                      reminderProvider.toggleTaken(nextReminder.id);
+                    }
                   },
                   icon: const Icon(
                     Icons.undo_rounded,
@@ -183,9 +211,9 @@ class _NextDoseCardState extends State<NextDoseCard> {
                 )
               : ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      _isTaken = true;
-                    });
+                    if (nextReminder != null) {
+                      reminderProvider.toggleTaken(nextReminder.id);
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("Dose for $medName recorded!"),

@@ -16,6 +16,7 @@ import 'widgets/compliance_wave_painter.dart';
 import 'widgets/dashboard_header.dart';
 import 'widgets/next_dose_card.dart';
 import 'widgets/overview_module_card.dart';
+import 'widgets/pharmacy_reservation_sheet.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -780,7 +781,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   _buildMiniActionBtn(Icons.call_rounded, () {}),
                   const SizedBox(width: 6),
-                  _buildMiniActionBtn(Icons.directions_rounded, () {}),
+                  _buildMiniActionBtn(Icons.qr_code_2_rounded, () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (ctx) => PharmacyReservationSheet(
+                        pharmacyName: name,
+                        pharmacyAddress: address,
+                      ),
+                    );
+                  }),
                 ],
               ),
             ],

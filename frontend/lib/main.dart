@@ -6,6 +6,7 @@ import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
 import 'providers/auth_provider.dart';
 import 'providers/prescription_provider.dart';
+import 'providers/reminder_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => PrescriptionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ReminderProvider(),
         ),
       ],
       child: const SmartHealthcareApp(),

@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../providers/prescription_provider.dart';
+import '../../../services/pdf/pdf_report_service.dart';
 import '../../../widgets/prescription/status_card.dart';
 import '../../../widgets/prescription/ocr_text_card.dart';
 import '../../../widgets/prescription/medicine_card.dart';
@@ -53,6 +54,16 @@ class PrescriptionDetailsScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf_rounded, color: Colors.redAccent),
+            tooltip: "Export PDF Report",
+            onPressed: () {
+              PdfReportService.generateAndShareReport(context, prescription);
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),
